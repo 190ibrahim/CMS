@@ -6,6 +6,7 @@ if (isset($_POST['add_user'])) {
     $user_lastname = $_POST['user_lastname'];
     $user_email = $_POST['user_email'];
     $user_password = $_POST['user_password'];
+    $user_password = password_hash($user_password, PASSWORD_DEFAULT);
     $user_image = $_FILES['user_image']['name'];
     $user_image_temp = $_FILES['user_image']['tmp_name'];
     $user_role = $_POST['user_role'];

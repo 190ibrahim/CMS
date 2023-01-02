@@ -24,6 +24,7 @@ if (isset($_POST['update_user'])) {
 
     $the_username = $_POST['username'];
     $the_user_password = $_POST['user_password'];
+    $the_user_password = password_hash($the_user_password, PASSWORD_DEFAULT);
     $the_user_firstname = $_POST['user_firstname'];
     $the_user_lastname = $_POST['user_lastname'];
 
@@ -60,6 +61,7 @@ if (isset($_POST['update_user'])) {
 
     $update_user_query = mysqli_query($connection, $query);
     comfirm($update_user_query);
+    
     echo " <div class='alert alert-success' role='alert'>User Updated: 
     <a href='users.php'>View User</a> </div>";
 }

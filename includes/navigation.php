@@ -33,11 +33,19 @@
                                         <a href='admin/posts.php?source=edit_post&p_id={$the_post_id}'>Edit post</a>
                                     </li> ";
                         }              
+                    }else if(!isset($_SESSION['user_role'])){
+
+                        echo "  <li>
+                            <a href='registration.php'>Register</a>
+                            </li> ";
                     }
                     ?>
 
 
 
+                    <li>
+                        <a href='contact.php'>Contact us</a>
+                    </li>
 
 
 
