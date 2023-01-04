@@ -23,7 +23,7 @@ if (isset($_POST['create_post'])) {
    
 
     $create_post_query = $connection->prepare( $query);
-    confirm($create_post_query->execute([$post_category_id, $post_title,$post_author,$post_image, $post_content,$post_tags,$post_status ]));
+    $create_post_query->execute([$post_category_id, $post_title,$post_author,$post_image, $post_content,$post_tags,$post_status ]);
     // header("Location: posts.php");
     // exit;
 
@@ -48,7 +48,7 @@ Or <a href='posts.php'>Edit Other Posts</a></div>";
         <select class="form-select" name="post_category" id="">
             <?php
             $query = $connection->prepare("SELECT * FROM categories");
-            confirm($query->execute());
+            $query->execute();
             $category = $query->fetchAll();
             foreach ($category as $row) {
                 $cat_title = $row['cat_title'];

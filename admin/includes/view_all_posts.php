@@ -20,7 +20,7 @@
 
         $query = "SELECT * FROM posts";
         $select_posts = $connection->prepare( $query);
-        confirm($select_posts->execute());
+        $select_posts->execute();
         $posts = $select_posts-> fetchAll();
 
         foreach($posts as $row){
@@ -38,7 +38,7 @@
             $query1 = "SELECT * FROM categories WHERE cat_id= $post_category_id";
 
             $select_category = $connection->prepare( $query1);
-            confirm($select_category->execute());
+            $select_category->execute();
             $category = $select_category->fetchAll();
             foreach ($category as $row) {
                 $cat_title = $row['cat_title'];
@@ -72,7 +72,7 @@ if (isset($_GET['delete'])) {
     $the_post_id = $_GET['delete'];
     $delete_query = "DELETE FROM posts WHERE post_id =?";
     $delete_query = $connection->prepare( $delete_query);
-    confirm($delete_query->execute([$the_post_id]));
+    $delete_query->execute([$the_post_id]);
 
     header("Location: posts.php");
 }

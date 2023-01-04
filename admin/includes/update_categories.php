@@ -7,7 +7,7 @@
         $cat_id = $_GET['edit'];
         $query = "SELECT * FROM categories WHERE cat_id = ?  ";
         $select_categories_id = $connection->prepare( $query);
-        confirm($select_categories_id->execute([$cat_id]));
+        $select_categories_id->execute([$cat_id]);
         $category = $select_categories_id->fetchAll();
 
         foreach($category as $row){
@@ -27,7 +27,7 @@
         $the_cat_title = $_POST['cat_title'];
         $query = "UPDATE categories SET cat_title = ? WHERE cat_id = ? ";
         $update_query = $connection->prepare( $query);
-        confirm($update_query->execute([$the_cat_title ,$cat_id]));
+        $update_query->execute([$the_cat_title ,$cat_id]);
 
         echo " <div class='alert alert-success' role='alert'>Category Updated: </div>";
     }

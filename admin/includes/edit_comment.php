@@ -5,7 +5,7 @@ if (isset($_GET['comment_id'])) {
 
 $query = "SELECT * FROM comments WHERE comment_id = ? ";
 $select_comments_by_id = $connection->prepare( $query);
-confirm($select_comments_by_id->execute([$the_comment_id]));
+$select_comments_by_id->execute([$the_comment_id]);
 $comment = $select_comments_by_id->fetchAll();
 
 foreach($comment as $row){
@@ -41,7 +41,7 @@ if (isset($_POST['update_post'])) {
     if (empty($the_post_image)) {
         $query = "SELECT * FROM posts WHERE post_id = ?";
         $select_image = $connection->prepare( $query);
-        confirm($select_image->execute([$the_post_id]));
+        $select_image->execute([$the_post_id]);
         $selected_image = $select_image->fetchAll();
         
         foreach($selected_image as $row){
@@ -61,7 +61,7 @@ if (isset($_POST['update_post'])) {
     $query .= "WHERE post_id = ? ";
 
     $update_post = $connection->prepare( $query);
-    confirm($update_post->execute([$the_post_title, $the_post_category_id, $the_post_author, $the_post_status, $the_post_tags, $the_post_content,  $the_post_image, $the_post_id ]));
+    $update_post->execute([$the_post_title, $the_post_category_id, $the_post_author, $the_post_status, $the_post_tags, $the_post_content,  $the_post_image, $the_post_id ]);
 
     echo " <div class='alert alert-success' role='alert'>Comment Updated: 
     <a href='comments.php'>View Comment</a> </div>";
@@ -81,7 +81,7 @@ if (isset($_POST['update_post'])) {
             $query = "SELECT * FROM categories";
 
             $select_categories = $connection->prepare( $query);
-            confirm($select_categories->execute([$the_comment_id]));
+            $select_categories->execute([$the_comment_id]);
             $category = $select_categories->fetchAll();
             
             foreach($category as $row){

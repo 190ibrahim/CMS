@@ -7,7 +7,7 @@ if(isset($_SESSION['username'])){
 
     $query = "SELECT * FROM users WHERE username = ?";
     $select_user_query = $connection->prepare( $query);
-    confirm($select_user_query->execute([$username]));
+    $select_user_query->execute([$username]);
     $logged_in_user = $select_user_query->fetchAll();
     foreach($logged_in_user as $row){
         $user_id = $row['user_id'];
@@ -41,7 +41,7 @@ if (isset($_POST['update_user'])) {
     if (empty($the_user_image)) {
         $query = "SELECT * FROM users WHERE user_id = ?";
         $select_image = $connection->prepare( $query);
-        confirm($select_image->execute([$user_id]));
+        $select_image->execute([$user_id]);
         $user_image = $select_image->fetchAll();
         
         foreach($user_image as $row){
@@ -61,7 +61,7 @@ if (isset($_POST['update_user'])) {
     $query .= "WHERE username = ? ";
 
     $update_user_query = $connection->prepare( $query);
-    confirm($update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_image,$the_user_email,$username] ));
+    $update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_image,$the_user_email,$username] );
 
     header("Location: profile.php");
 }

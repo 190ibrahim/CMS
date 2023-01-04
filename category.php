@@ -23,7 +23,7 @@ include "includes\header.php";
                 }
                 $query = "SELECT * FROM posts WHERE post_category_id  = ?";
                 $select_all_posts_query = $connection->prepare( $query);
-                confirm($select_all_posts_query->execute([$cat_id]));
+                $select_all_posts_query->execute([$cat_id]);
                 $post = $select_all_posts_query->fetchAll();
                 foreach($post as $row){
                     $post_id = $row['post_id'];

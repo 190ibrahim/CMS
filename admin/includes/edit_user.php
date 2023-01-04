@@ -6,7 +6,7 @@ if (isset($_GET['user_id'])) {
 $query = "SELECT * FROM users WHERE user_id = ?";
 
 $select_users_by_id = $connection->prepare( $query);
-confirm($select_users_by_id->execute([$the_user_id]));
+$select_users_by_id->execute([$the_user_id]);
 $user = $select_users_by_id->fetchAll();
 foreach($user as $row){
     $user_id = $row['user_id'];
@@ -43,7 +43,7 @@ if (isset($_POST['update_user'])) {
     if (empty($the_user_image)) {
         $query = "SELECT * FROM users WHERE user_id = ? ";
         $select_image = $connection->prepare( $query);
-        confirm($select_image->execute([$the_user_id]));
+        $select_image->execute([$the_user_id]);
         $selected_image = $select_image->fetchAll();
         foreach($selected_image as $row){
             $the_user_image = $row['user_image'];
@@ -63,7 +63,7 @@ if (isset($_POST['update_user'])) {
 
 
     $update_user_query = $connection->prepare( $query);
-    confirm($update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_role, $the_user_image, $the_user_email, $the_user_id]));
+    $update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_role, $the_user_image, $the_user_email, $the_user_id]);
     
     echo " <div class='alert alert-success' role='alert'>User Updated: 
     <a href='users.php'>View User</a> </div>";

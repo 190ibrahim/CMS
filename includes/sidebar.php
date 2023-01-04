@@ -43,7 +43,7 @@
                 <!-- Blog Categories Well -->
                 <?php
                 $query = $connection->prepare("SELECT * FROM categories"); //LIMIT 3
-                confirm($query->execute());         
+                $query->execute();         
                 $all_categories = $query->fetchAll();  
                 ?>
                 <div class="well">

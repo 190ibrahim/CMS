@@ -10,7 +10,7 @@ if (isset($_POST['login'])) {
 
     $query = "SELECT * FROM users WHERE username = ?";
     $select_user_query = $connection->prepare( $query);
-    confirm($select_user_query->execute([$username]));
+    $select_user_query->execute([$username]);
     $log_in_user = $select_user_query->fetchAll();
 
 

@@ -19,7 +19,7 @@ include "includes\header.php";
             <div class="col-md-8">
                 <?php
                 $query = $connection->prepare("SELECT * FROM posts WHERE post_status = 'published'");
-                confirm($query->execute());
+                $query->execute();
                 $post = $query->fetchAll();
                 foreach ($post as $row) {
                     $post_id = $row['post_id'];

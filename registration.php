@@ -18,7 +18,7 @@ if(isset($_POST['submit'])){
 
 
     $register_query = $connection->prepare( $query);
-    confirm($register_query->execute([$username, $password, $email]));
+    $register_query->execute([$username, $password, $email]);
 
     echo " <div class='alert alert-success mx-auto' role='alert'>Successful Registration</div>";
 }

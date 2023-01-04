@@ -18,7 +18,7 @@
         $query = "SELECT * FROM comments";
 
         $select_comments = $connection->prepare( $query);
-        confirm($select_comments->execute());
+        $select_comments->execute();
         $comment = $select_comments->fetchAll();
         foreach($comment as $row){
         
@@ -38,7 +38,7 @@
 
             $query1 = "SELECT * FROM posts WHERE post_id= ? ";
             $select_post = $connection->prepare( $query1);
-            confirm($select_post->execute([$comment_post_id]));
+            $select_post->execute([$comment_post_id]);
             $post = $select_post->fetchAll();
             foreach($post as $row){
                 $post_title = $row['post_title'];
@@ -64,7 +64,7 @@ if (isset($_GET['approve_comment'])) {
     $the_comment_id = $_GET['approve_comment'];
     $query = "UPDATE comments SET comment_status='Approved' WHERE comment_id = ? ";
     $approve_query = $connection->prepare( $query);
-    confirm($approve_query->execute([$the_comment_id]));
+    $approve_query->execute([$the_comment_id]);
     header("Location: comments.php");
 }
 
@@ -73,7 +73,7 @@ if (isset($_GET['unapprove_comment'])) {
     $the_comment_id = $_GET['unapprove_comment'];
     $query = "UPDATE comments SET comment_status='Unapproved' WHERE comment_id = ? ";
     $unapprove_query = $connection->prepare( $query);
-    confirm($unapprove_query->execute([$the_comment_id]));
+    $unapprove_query->execute([$the_comment_id]);
     header("Location: comments.php");
 }
 
@@ -84,7 +84,7 @@ if (isset($_GET['delete_comment'])) {
     $the_comment_id = $_GET['delete_comment'];
     $query = "DELETE FROM comments WHERE comment_id = ? ";
     $delete_query = $connection->prepare( $query);
-    confirm($delete_query->execute([$the_comment_id]));
+    $delete_query->execute([$the_comment_id]);
     header("Location: comments.php");
 }
 ?>

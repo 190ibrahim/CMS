@@ -23,7 +23,7 @@
 
                     $query = "SELECT * FROM posts WHERE post_tags OR post_content LIKE '%?%' ";
                     $search_query =$connection->prepare( $query);
-                    confirm($search_query->execute([$search]));
+                    $search_query->execute([$search]);
                     $searched_post = $search_query->fetchAll();
 
 

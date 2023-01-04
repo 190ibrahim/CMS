@@ -21,7 +21,7 @@ include "includes\header.php";
 
                 $query = "SELECT * FROM posts";
                 $select_all_posts_query = $connection->prepare($query);
-                confirm($select_all_posts_query->execute());
+                $select_all_posts_query->execute();
                 $post=  $select_all_posts_query->fetchAll();
                 foreach($post as $row){
                     $post_title = $row['post_title'];

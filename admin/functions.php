@@ -7,8 +7,7 @@ function confirm($result) {
   }
 } 
 
-function insertCategories()
-{
+function insertCategories(){
     global $connection;
     if (isset($_POST['submit'])) {
 
@@ -19,7 +18,7 @@ function insertCategories()
             $query = "INSERT INTO categories(cat_title)";
             $query .= "VALUES(?)";
             $create_category_query = $connection->prepare( $query);
-            confirm($create_category_query->execute($cat_title));
+            $create_category_query->execute($cat_title);
 
             header("Location: categories.php");
             exit;
@@ -36,7 +35,7 @@ function findAllCategories()
 
     $query = "SELECT * FROM categories";
     $select_categories = $connection->prepare( $query);
-    confirm($select_categories->execute());
+    $select_categories->execute();
     $category = $select_categories->fetchAll();
 
     foreach($category as $row){
@@ -61,7 +60,7 @@ function deleteCategories()
         $the_cat_id = $_GET['delete'];
         $query = "DELETE FROM categories WHERE cat_id = ? ";
         $delete_query = $connection->prepare( $query);
-        confirm($delete_query->execute($the_cat_id));
+        $delete_query->execute($the_cat_id);
 
         header("Location: categories.php");
     }
@@ -73,7 +72,7 @@ function count_rows($table) {
     global $connection;
     $query = "SELECT * FROM $table";
     $result = $connection->prepare( $query);
-    confirm($result->execute());
+    $result->execute();
 
     return $result->rowCount();
 }
@@ -81,6 +80,6 @@ function count_rows($table) {
 function getRowCount($query) {
     global $connection;
   $result = $connection->prepare( $query);
-  confirm($result->execute());
+  $result->execute();
   return $result->rowCount();
 }

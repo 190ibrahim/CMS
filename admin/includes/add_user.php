@@ -18,7 +18,7 @@ if (isset($_POST['add_user'])) {
     $query .= "user_lastname, user_email, user_image, user_role) ";
     $query .= "VALUES(? , ? , ? , ? , ? , ? , ? )";
     $add_user_query = $connection->prepare( $query);
-    confirm($add_user_query->execute([$username, $user_password, $user_firstname, $user_lastname, $user_email, $user_image, $user_role ]));
+    $add_user_query->execute([$username, $user_password, $user_firstname, $user_lastname, $user_email, $user_image, $user_role ]);
     // header("Location: posts.php");
     // exit;
 

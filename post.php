@@ -23,7 +23,7 @@ include "includes\header.php";
                 }
 
                 $query = $connection->prepare("SELECT * FROM posts WHERE post_id = {$the_post_id}");
-                confirm($query->execute());
+                $query->execute();
                 $post = $query->fetchAll();
                 foreach ($post as $row) {
                     $post_title = $row['post_title'];
@@ -70,13 +70,13 @@ include "includes\header.php";
                     $query .= "comment_email,comment_content,comment_status,comment_date) ";
                     $query .= " VALUES (?, ?, ?, ?, ?, now())";
                     $create_comment_query =$connection->prepare( $query);
-                    confirm($create_comment_query->execute([$the_post_id, $comment_author, $comment_email,$comment_content,$comment_status]));
+                    $create_comment_query->execute([$the_post_id, $comment_author, $comment_email,$comment_content,$comment_status]);
 
 
                     $query = "UPDATE posts SET post_comment_count =post_comment_count+1";
                     $query .= " WHERE post_id = ?";
                     $count_comment_query = $connection->prepare( $query);
-                    confirm($count_comment_query->execute([$the_post_id]));
+                    $count_comment_query->execute([$the_post_id]);
 
                 }
 
@@ -121,7 +121,7 @@ include "includes\header.php";
                 $query .= " ORDER BY comment_id DESC";
 
                 $select_post_comments = $connection->prepare($query);
-                confirm($select_post_comments->execute([$the_post_id]));
+                $select_post_comments->execute([$the_post_id]);
                 $comment = $select_post_comments->fetchAll();
 
                 foreach ($comment as $row) {

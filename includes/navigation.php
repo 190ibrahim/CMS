@@ -17,7 +17,7 @@
                 <ul class="nav navbar-nav">
                     <?php
                     $query = $connection->prepare("SELECT * FROM categories LIMIT 3");
-                    confirm($query->execute());
+                    $query->execute();
                     $category = $query->fetchAll();
                     foreach ($category as $row) {
                         $cat_title = $row['cat_title'];
