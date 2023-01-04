@@ -1,12 +1,11 @@
 <?php
 
-function comfirm($result)
-{
-    global $connection;
-    if (!$result) {
-        die('QUERY FAILED' . mysqli_error($connection));
-    }
-}
+function confirm($result) {
+  global $connection;
+  if (!$result) {
+    die('QUERY FAILED' . $connection->errorInfo());
+  }
+} 
 
 function insertCategories()
 {
@@ -18,13 +17,13 @@ function insertCategories()
             echo "This field should not be empty";
         } else {
             $query = "INSERT INTO categories(cat_title)";
-            $query .= "VALUES('{$cat_title}')";
-            $create_category_query = mysqli_query($connection, $query);
+            $query .= "VALUES(?)";
+            $create_category_query = $connection->prepare( $query);
+            confirm($create_category_query->execute($cat_title));
+
             header("Location: categories.php");
             exit;
-            if (!$create_category_query) {
-                die('QUERY FAILED' . mysqli_error($connection));
-            }
+
         }
     }
 }
@@ -36,8 +35,11 @@ function findAllCategories()
     global $connection;
 
     $query = "SELECT * FROM categories";
-    $select_categories = mysqli_query($connection, $query);
-    while ($row = mysqli_fetch_assoc($select_categories)) {
+    $select_categories = $connection->prepare( $query);
+    confirm($select_categories->execute());
+    $category = $select_categories->fetchAll();
+
+    foreach($category as $row){
         $cat_id = $row['cat_id'];
         $cat_title = $row['cat_title'];
         echo "<tr>";
@@ -57,8 +59,10 @@ function deleteCategories()
     if (isset($_GET['delete'])) {
 
         $the_cat_id = $_GET['delete'];
-        $query = "DELETE FROM categories WHERE cat_id = {$the_cat_id} ";
-        $delete_query = mysqli_query($connection, $query);
+        $query = "DELETE FROM categories WHERE cat_id = ? ";
+        $delete_query = $connection->prepare( $query);
+        confirm($delete_query->execute($the_cat_id));
+
         header("Location: categories.php");
     }
 }
@@ -66,13 +70,17 @@ function deleteCategories()
 
 
 function count_rows($table) {
-  global $connection;
-  $query = "SELECT * FROM $table";
-  $result = mysqli_query($connection, $query);
-  return mysqli_num_rows($result);
+    global $connection;
+    $query = "SELECT * FROM $table";
+    $result = $connection->prepare( $query);
+    confirm($result->execute());
+
+    return $result->rowCount();
 }
 
-function getRowCount($connection, $query) {
-  $result = mysqli_query($connection, $query);
-  return mysqli_num_rows($result);
+function getRowCount($query) {
+    global $connection;
+  $result = $connection->prepare( $query);
+  confirm($result->execute());
+  return $result->rowCount();
 }

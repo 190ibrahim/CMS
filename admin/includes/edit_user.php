@@ -3,9 +3,12 @@ if (isset($_GET['user_id'])) {
     $the_user_id = $_GET['user_id'];
 }
 
-$query = "SELECT * FROM users WHERE user_id = {$the_user_id}";
-$select_users_by_id = mysqli_query($connection, $query);
-while ($row = mysqli_fetch_assoc($select_users_by_id)) {
+$query = "SELECT * FROM users WHERE user_id = ?";
+
+$select_users_by_id = $connection->prepare( $query);
+confirm($select_users_by_id->execute([$the_user_id]));
+$user = $select_users_by_id->fetchAll();
+foreach($user as $row){
     $user_id = $row['user_id'];
     $username = $row['username'];
     $user_password = $row['user_password'];
@@ -38,29 +41,29 @@ if (isset($_POST['update_user'])) {
     move_uploaded_file($the_user_image_temp, "../images/$the_user_image"); //DOUBLE QOUTES
 
     if (empty($the_user_image)) {
-        $query = "SELECT * FROM users WHERE user_id = {$the_user_id}";
-        $select_image = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_image)) {
+        $query = "SELECT * FROM users WHERE user_id = ? ";
+        $select_image = $connection->prepare( $query);
+        confirm($select_image->execute([$the_user_id]));
+        $selected_image = $select_image->fetchAll();
+        foreach($selected_image as $row){
             $the_user_image = $row['user_image'];
         }
     }
 
     $query = "UPDATE users SET ";
-    $query .= "username  = '{$the_username}', ";
-    $query .= "user_password = '{$the_user_password}', ";
-
-    $query .= "user_firstname = '{$the_user_firstname}', ";
-    $query .= "user_lastname = '{$the_user_lastname}', ";
-
-    $query .= "user_role= '{$the_user_role}', ";
-    $query .= "user_image  = '{$the_user_image}',  ";
-    $query .= "user_email  = '{$the_user_email}' ";
-    $query .= "WHERE user_id = {$the_user_id} ";
+    $query .= "username  = ?, ";
+    $query .= "user_password = ?, ";
+    $query .= "user_firstname = ?, ";
+    $query .= "user_lastname = ?, ";
+    $query .= "user_role= ?, ";
+    $query .= "user_image  = ?,  ";
+    $query .= "user_email  = ? ";
+    $query .= " WHERE user_id = ? ";
 
 
 
-    $update_user_query = mysqli_query($connection, $query);
-    comfirm($update_user_query);
+    $update_user_query = $connection->prepare( $query);
+    confirm($update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_role, $the_user_image, $the_user_email, $the_user_id]));
     
     echo " <div class='alert alert-success' role='alert'>User Updated: 
     <a href='users.php'>View User</a> </div>";

@@ -21,22 +21,19 @@
                     $search = $_POST['search'];
 
 
-                    $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' ";
-                    $search_query = mysqli_query($connection, $query);
+                    $query = "SELECT * FROM posts WHERE post_tags OR post_content LIKE '%?%' ";
+                    $search_query =$connection->prepare( $query);
+                    confirm($search_query->execute([$search]));
+                    $searched_post = $search_query->fetchAll();
 
-                    if (!$search_query) {
 
-                        die("QUERY FAILED" . mysqli_error($connection));
-                    }
-
-                    $count = mysqli_num_rows($search_query);
+                    $count = $search_query->rowCount();
 
                     if ($count == 0) {
 
                         echo "<h1> NO RESULT</h1>";
                     } else {
-
-                        while ($row = mysqli_fetch_assoc($search_query)) {
+                        foreach($searched_post as $row){
                             $post_title = $row['post_title'];
                             $post_author = $row['post_author'];
                             $post_date = $row['post_date'];

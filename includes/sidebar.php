@@ -42,8 +42,9 @@
 
                 <!-- Blog Categories Well -->
                 <?php
-                $query = "SELECT * FROM categories  "; //LIMIT 3
-                $select_categories_sidebar = mysqli_query($connection, $query);
+                $query = $connection->prepare("SELECT * FROM categories"); //LIMIT 3
+                confirm($query->execute());         
+                $all_categories = $query->fetchAll();  
                 ?>
                 <div class="well">
                     <h4>Blog Categories</h4>
@@ -51,12 +52,12 @@
                         <div class="col-lg-12">
                             <ul class="list-unstyled">
                                 <?php
-                                while ($row = mysqli_fetch_assoc($select_categories_sidebar)) {
+                                foreach ($all_categories as $row) {
                                     $cat_title = $row['cat_title'];
                                     $cat_id = $row['cat_id'];
                                     echo "<li><a href='category.php?category=$cat_id'>{$cat_title}</a>
-                                </li>";
-                                } ?>
+                                    </li>";
+                            } ?>
                             </ul>
                         </div>
                     </div>

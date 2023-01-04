@@ -14,8 +14,10 @@
     <tbody>
         <?php
         $query = "SELECT * FROM users";
-        $select_users = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_users)) {
+        $select_users = $connection->prepare( $query);
+        confirm($select_users->execute());
+        $user = $select_users->fetchAll();
+        foreach($user as $row){
             $user_id = $row['user_id'];
             $username = $row['username'];
             $user_firstname = $row['user_firstname'];
@@ -47,16 +49,20 @@
 if (isset($_GET['change_to_admin'])) {
 
     $the_user_id = $_GET['change_to_admin'];
-    $query = "UPDATE users SET user_role='admin' WHERE user_id = {$the_user_id} ";
-    $change_to_admin_query = mysqli_query($connection, $query);
+    $query = "UPDATE users SET user_role='admin' WHERE user_id = ?";
+    $change_to_admin_query = $connection->prepare( $query);
+    confirm($change_to_admin_query->execute([$the_user_id]));
+    
     header("Location: users.php");
 }
 
 if (isset($_GET['change_to_sub'])) {
 
     $the_user_id = $_GET['change_to_sub'];
-    $query = "UPDATE users SET user_role='subscriber' WHERE user_id = {$the_user_id} ";
-    $change_to_sub_query = mysqli_query($connection, $query);
+    $query = "UPDATE users SET user_role='subscriber' WHERE user_id = ?";
+    $change_to_sub_query = $connection->prepare( $query);
+    confirm($change_to_sub_query->execute([$the_user_id]));
+
     header("Location: users.php");
 }
 
@@ -65,8 +71,10 @@ if (isset($_GET['change_to_sub'])) {
 if (isset($_GET['delete_user'])) {
 
     $the_user_id = $_GET['delete_user'];
-    $query = "DELETE FROM users WHERE user_id = {$the_user_id} ";
-    $delete_query = mysqli_query($connection, $query);
+    $query = "DELETE FROM users WHERE user_id = ? ";
+    $delete_query = $connection->prepare( $query);
+    confirm($delete_query->execute([$the_user_id]));
+
     header("Location: users.php");
 }
 ?>

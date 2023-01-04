@@ -7,17 +7,14 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $username = mysqli_real_escape_string($connection, $username);
-    $password = mysqli_real_escape_string($connection, $password);
 
-    $query = "SELECT * FROM users WHERE username = '{$username}'";
-    $select_user_query = mysqli_query($connection, $query);
-    if (!$select_user_query) {
+    $query = "SELECT * FROM users WHERE username = ?";
+    $select_user_query = $connection->prepare( $query);
+    confirm($select_user_query->execute([$username]));
+    $log_in_user = $select_user_query->fetchAll();
 
-        die("QUERY FAILED" . mysqli_error($connection));
-    }
 
-    while ($row = mysqli_fetch_array($select_user_query)) {
+    foreach($log_in_user as $row){
         $db_user_id = $row['user_id'];
         $db_username = $row['username'];
         $db_user_password = $row['user_password'];

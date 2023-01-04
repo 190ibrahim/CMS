@@ -11,18 +11,15 @@ if(isset($_POST['submit'])){
     $email =$_POST['email'];
     $password =$_POST['password'];
 
-    $username = mysqli_real_escape_string($connection, $username);
-    $email = mysqli_real_escape_string($connection, $email);
-    $password = mysqli_real_escape_string($connection, $password);
     $password = password_hash($password, PASSWORD_DEFAULT);
 //TODO: validating registraion
     $query = "INSERT INTO users (username, user_password, user_email, user_role) ";
-    $query .= "VALUES ('{$username}','{$password}' ,'{$email}','subscriber' )";
+    $query .= "VALUES (?,?,?,'subscriber')";
 
-    $register_query = mysqli_query($connection, $query);
-    if(!$register_query){
-        die('QUERY FAILED' . mysqli_error($connection));
-    }
+
+    $register_query = $connection->prepare( $query);
+    confirm($register_query->execute([$username, $password, $email]));
+
     echo " <div class='alert alert-success mx-auto' role='alert'>Successful Registration</div>";
 }
 

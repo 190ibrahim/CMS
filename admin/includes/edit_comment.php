@@ -3,9 +3,12 @@ if (isset($_GET['comment_id'])) {
     $the_comment_id = $_GET['comment_id'];
 }
 
-$query = "SELECT * FROM comments WHERE comment_id = {$the_comment_id}";
-$select_comments_by_id = mysqli_query($connection, $query);
-while ($row = mysqli_fetch_assoc($select_comments_by_id)) {
+$query = "SELECT * FROM comments WHERE comment_id = ? ";
+$select_comments_by_id = $connection->prepare( $query);
+confirm($select_comments_by_id->execute([$the_comment_id]));
+$comment = $select_comments_by_id->fetchAll();
+
+foreach($comment as $row){
     $comment_id = $row['comment_id'];
     $comment_author = $row['comment_author'];
     $comment_email = $row['comment_email'];
@@ -36,28 +39,30 @@ if (isset($_POST['update_post'])) {
     move_uploaded_file($the_post_image_temp, "../images/$the_post_image"); //DOUBLE QOUTES
 
     if (empty($the_post_image)) {
-        $query = "SELECT * FROM posts WHERE post_id = {$the_post_id}";
-        $select_image = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_image)) {
+        $query = "SELECT * FROM posts WHERE post_id = ?";
+        $select_image = $connection->prepare( $query);
+        confirm($select_image->execute([$the_post_id]));
+        $selected_image = $select_image->fetchAll();
+        
+        foreach($selected_image as $row){
             $the_post_image = $row['post_image'];
         }
     }
 
     $query = "UPDATE posts SET ";
-    $query .= "post_title  = '{$the_post_title}', ";
-    $query .= "post_category_id = '{$the_post_category_id}', ";
+    $query .= "post_title  = ?, ";
+    $query .= "post_category_id = ?, ";
     $query .= "post_date   =  now(), ";
-    $query .= "post_author = '{$the_post_author}', ";
-    $query .= "post_status = '{$the_post_status}', ";
-    $query .= "post_tags   = '{$the_post_tags}', ";
-    $query .= "post_content= '{$the_post_content}', ";
-    $query .= "post_image  = '{$the_post_image}' ";
-    $query .= "WHERE post_id = {$the_post_id} ";
+    $query .= "post_author = ?, ";
+    $query .= "post_status = ?, ";
+    $query .= "post_tags   = ?, ";
+    $query .= "post_content= ?, ";
+    $query .= "post_image  = ? ";
+    $query .= "WHERE post_id = ? ";
 
+    $update_post = $connection->prepare( $query);
+    confirm($update_post->execute([$the_post_title, $the_post_category_id, $the_post_author, $the_post_status, $the_post_tags, $the_post_content,  $the_post_image, $the_post_id ]));
 
-
-    $update_post = mysqli_query($connection, $query);
-    comfirm($update_post);
     echo " <div class='alert alert-success' role='alert'>Comment Updated: 
     <a href='comments.php'>View Comment</a> </div>";
 }
@@ -74,9 +79,12 @@ if (isset($_POST['update_post'])) {
         <select class="form-select" name="post_category" id="">
             <?php
             $query = "SELECT * FROM categories";
-            $select_categories = mysqli_query($connection, $query);
-            comfirm($select_categories);
-            while ($row = mysqli_fetch_assoc($select_categories)) {
+
+            $select_categories = $connection->prepare( $query);
+            confirm($select_categories->execute([$the_comment_id]));
+            $category = $select_categories->fetchAll();
+            
+            foreach($category as $row){
                 $cat_id = $row['cat_id'];
                 $cat_title = $row['cat_title'];
                 echo "<option value='$cat_id'> $cat_title</option>";

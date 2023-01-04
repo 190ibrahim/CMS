@@ -3,9 +3,11 @@ if (isset($_GET['p_id'])) {
     $the_post_id = $_GET['p_id'];
 }
 
-$query = "SELECT * FROM posts WHERE post_id = {$the_post_id}";
-$select_posts_bt_id = mysqli_query($connection, $query);
-while ($row = mysqli_fetch_assoc($select_posts_bt_id)) {
+$query = "SELECT * FROM posts WHERE post_id = ?";
+$select_posts_by_id = $connection->prepare( $query);
+confirm($select_posts_by_id->execute([$the_post_id]));
+$modified_post = $select_posts_by_id-> fetchAll();
+foreach($modified_post as $row){
     $post_id = $row['post_id'];
     $post_author = $row['post_author'];
     $post_title = $row['post_title'];
@@ -39,28 +41,30 @@ if (isset($_POST['update_post'])) {
     move_uploaded_file($the_post_image_temp, "../images/$the_post_image"); //DOUBLE QOUTES
 
     if (empty($the_post_image)) {
-        $query = "SELECT * FROM posts WHERE post_id = {$the_post_id}";
-        $select_image = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_image)) {
+        $query = "SELECT * FROM posts WHERE post_id = ?";
+        $select_image = $connection->prepare( $query);
+        confirm($select_image->execute([$the_post_id]));
+        $selected_image = $select_posts_by_id-> fetchAll();
+    
+        foreach($selected_image as $row){
             $the_post_image = $row['post_image'];
         }
     }
 
     $query = "UPDATE posts SET ";
-    $query .= "post_title  = '{$the_post_title}', ";
-    $query .= "post_category_id = '{$the_post_category_id}', ";
+    $query .= "post_title  = ?, ";
+    $query .= "post_category_id = ?, ";
     $query .= "post_date   =  now(), ";
-    $query .= "post_author = '{$the_post_author}', ";
-    $query .= "post_status = '{$the_post_status}', ";
-    $query .= "post_tags   = '{$the_post_tags}', ";
-    $query .= "post_content= '{$the_post_content}', ";
-    $query .= "post_image  = '{$the_post_image}' ";
-    $query .= "WHERE post_id = {$the_post_id} ";
+    $query .= "post_author = ?, ";
+    $query .= "post_status = ?, ";
+    $query .= "post_tags   = ?, ";
+    $query .= "post_content= ?, ";
+    $query .= "post_image  = ? ";
+    $query .= "WHERE post_id = ? ";
 
+    $update_post = $connection->prepare( $query);
+    confirm($update_post->execute([$the_post_title, $the_post_category_id,$the_post_author,$the_post_status, $the_post_tags,  $the_post_content,$the_post_image, $the_post_id]));
 
-
-    $update_post = mysqli_query($connection, $query);
-    comfirm($update_post);
     echo " <div class='alert alert-success' role='alert'>Post Updated: 
     <a href='../post.php?p_id= {$the_post_id}'>View Post</a>
 Or <a href='posts.php'>Edit Other Posts</a></div>";
@@ -77,12 +81,12 @@ Or <a href='posts.php'>Edit Other Posts</a></div>";
         <label for="post_category">Choose a category:</label>
         <select class="form-select" name="post_category" id="">
             <?php
-            $query = "SELECT * FROM categories";
-            $select_categories = mysqli_query($connection, $query);
-            comfirm($select_categories);
-            while ($row = mysqli_fetch_assoc($select_categories)) {
-                $cat_id = $row['cat_id'];
+            $query = $connection->prepare("SELECT * FROM categories");
+            confirm($query->execute());
+            $category = $query->fetchAll();
+            foreach ($category as $row) {
                 $cat_title = $row['cat_title'];
+                $cat_id = $row['cat_id'];
                 echo "<option value='$cat_id'> $cat_title</option>";
             }
             ?>

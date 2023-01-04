@@ -142,22 +142,22 @@
                 <?php
 
                 $query = "SELECT * FROM posts WHERE post_status= 'draft'";
-                $draft_posts_count = getRowCount($connection, $query);
+                $draft_posts_count = getRowCount($query);
                 
                 $query = "SELECT * FROM posts WHERE post_status= 'published'";
-                $published_posts_count =  getRowCount($connection, $query);
+                $published_posts_count =  getRowCount($query);
                 
                 $query = "SELECT * FROM users WHERE user_role= 'admin'";
-                $admin_users_count =  getRowCount($connection, $query);
+                $admin_users_count =  getRowCount($query);
                 
                 $query = "SELECT * FROM users WHERE user_role= 'subscriber'";
-                $subscriber_users_count =  getRowCount($connection, $query);
+                $subscriber_users_count =  getRowCount($query);
                 
                 $query = "SELECT * FROM comments WHERE comment_status= 'Approved'";
-                $approved_comments_count =  getRowCount($connection, $query);
+                $approved_comments_count =  getRowCount($query);
                 
                 $query = "SELECT * FROM comments WHERE comment_status= 'Unapproved'";
-                $unapproved_comments_count =  getRowCount($connection, $query);
+                $unapproved_comments_count =  getRowCount($query);
                 
 
 ?>

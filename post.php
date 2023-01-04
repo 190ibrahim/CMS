@@ -22,9 +22,10 @@ include "includes\header.php";
                     $the_post_id = $_GET['p_id'];
                 }
 
-                $query = "SELECT * FROM posts WHERE post_id = {$the_post_id}";
-                $select_all_posts_query = mysqli_query($connection, $query);
-                while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+                $query = $connection->prepare("SELECT * FROM posts WHERE post_id = {$the_post_id}");
+                confirm($query->execute());
+                $post = $query->fetchAll();
+                foreach ($post as $row) {
                     $post_title = $row['post_title'];
                     $post_author = $row['post_author'];
                     $post_date = $row['post_date'];
@@ -67,17 +68,16 @@ include "includes\header.php";
 //TODO: validating the comments form not submiting empty strings.
                     $query = "INSERT INTO comments (comment_post_id ,comment_author, ";
                     $query .= "comment_email,comment_content,comment_status,comment_date) ";
-                    $query .= "VALUES ($the_post_id,'{$comment_author}','$comment_email', ";
-                    $query .= " '$comment_content','$comment_status' ,now())";
-                    $create_comment_query = mysqli_query($connection, $query);
-                    if (!$create_comment_query) {
+                    $query .= " VALUES (?, ?, ?, ?, ?, now())";
+                    $create_comment_query =$connection->prepare( $query);
+                    confirm($create_comment_query->execute([$the_post_id, $comment_author, $comment_email,$comment_content,$comment_status]));
 
-                        die("QUERY FAILED" . mysqli_error($connection));
-                    }
 
                     $query = "UPDATE posts SET post_comment_count =post_comment_count+1";
-                    $query .= " WHERE post_id = $the_post_id";
-                    $count_comment_query = mysqli_query($connection, $query);
+                    $query .= " WHERE post_id = ?";
+                    $count_comment_query = $connection->prepare( $query);
+                    confirm($count_comment_query->execute([$the_post_id]));
+
                 }
 
 
@@ -116,14 +116,15 @@ include "includes\header.php";
                 if (isset($_GET['p_id'])) {
                     $the_post_id = $_GET['p_id'];
                 }
-                $query = "SELECT * FROM comments WHERE comment_post_id= $the_post_id";
+                $query = "SELECT * FROM comments WHERE comment_post_id= ?";
                 $query .= " AND comment_status= 'Approved'";
                 $query .= " ORDER BY comment_id DESC";
-                $select_post_comments = mysqli_query($connection, $query);
-                if (!$select_post_comments) {
-                    die('Query faild' . mysqli_error($connection));
-                }
-                while ($row = mysqli_fetch_assoc($select_post_comments)) {
+
+                $select_post_comments = $connection->prepare($query);
+                confirm($select_post_comments->execute([$the_post_id]));
+                $comment = $select_post_comments->fetchAll();
+
+                foreach ($comment as $row) {
                     $comment_author = $row['comment_author'];
                     $comment_date = $row['comment_date'];
                     $comment_content = $row['comment_content'];

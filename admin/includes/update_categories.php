@@ -5,9 +5,12 @@
     <?php
     if (isset($_GET['edit'])) {
         $cat_id = $_GET['edit'];
-        $query = "SELECT * FROM categories WHERE cat_id = $cat_id ";
-        $select_categories_id = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_categories_id)) {
+        $query = "SELECT * FROM categories WHERE cat_id = ?  ";
+        $select_categories_id = $connection->prepare( $query);
+        confirm($select_categories_id->execute([$cat_id]));
+        $category = $select_categories_id->fetchAll();
+
+        foreach($category as $row){
             $cat_id = $row['cat_id'];
             $cat_title = $row['cat_title'];
     ?>
@@ -22,11 +25,10 @@
     if (isset($_POST['update_category'])) {
 
         $the_cat_title = $_POST['cat_title'];
-        $query = "UPDATE categories SET cat_title = '{$the_cat_title}' WHERE cat_id = {$cat_id} ";
-        $update_query = mysqli_query($connection, $query);
-        if (!$update_query) {
-            die("QUERY FAILED" . mysqli_error($connection));
-        }
+        $query = "UPDATE categories SET cat_title = ? WHERE cat_id = ? ";
+        $update_query = $connection->prepare( $query);
+        confirm($update_query->execute([$the_cat_title ,$cat_id]));
+
         echo " <div class='alert alert-success' role='alert'>Category Updated: </div>";
     }
     ?>

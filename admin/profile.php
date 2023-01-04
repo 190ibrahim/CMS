@@ -5,23 +5,19 @@
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
 
-    $query = "SELECT * FROM users WHERE username = '{$username}'";
-    $select_user_query = mysqli_query($connection, $query);
-    if (!$select_user_query) {
-
-        die("QUERY FAILED" . mysqli_error($connection));
-    }
-
-
-    while ($row = mysqli_fetch_assoc($select_user_query)) {
-    $user_id = $row['user_id'];
-    $username = $row['username'];
-    $user_password = $row['user_password'];
-    $user_firstname = $row['user_firstname'];
-    $user_lastname = $row['user_lastname'];
-    $user_email = $row['user_email'];
-    $user_image = $row['user_image'];
-    $user_role = $row['user_role'];
+    $query = "SELECT * FROM users WHERE username = ?";
+    $select_user_query = $connection->prepare( $query);
+    confirm($select_user_query->execute([$username]));
+    $logged_in_user = $select_user_query->fetchAll();
+    foreach($logged_in_user as $row){
+        $user_id = $row['user_id'];
+        $username = $row['username'];
+        $user_password = $row['user_password'];
+        $user_firstname = $row['user_firstname'];
+        $user_lastname = $row['user_lastname'];
+        $user_email = $row['user_email'];
+        $user_image = $row['user_image'];
+        $user_role = $row['user_role'];
     }
 }
 ?>
@@ -43,26 +39,30 @@ if (isset($_POST['update_user'])) {
     move_uploaded_file($the_user_image_temp, "../images/$the_user_image"); //DOUBLE QOUTES
 
     if (empty($the_user_image)) {
-        $query = "SELECT * FROM users WHERE user_id = {$user_id}";
-        $select_image = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_image)) {
+        $query = "SELECT * FROM users WHERE user_id = ?";
+        $select_image = $connection->prepare( $query);
+        confirm($select_image->execute([$user_id]));
+        $user_image = $select_image->fetchAll();
+        
+        foreach($user_image as $row){
             $the_user_image = $row['user_image'];
         }
     }
 
     $query = "UPDATE users SET ";
-    $query .= "username  = '{$the_username}', ";
-    $query .= "user_password = '{$the_user_password}', ";
+    $query .= "username  = ?, ";
+    $query .= "user_password = ?, ";
 
-    $query .= "user_firstname = '{$the_user_firstname}', ";
-    $query .= "user_lastname = '{$the_user_lastname}', ";
+    $query .= "user_firstname = '?, ";
+    $query .= "user_lastname = ?, ";
 
-    $query .= "user_image  = '{$the_user_image}',  ";
-    $query .= "user_email  = '{$the_user_email}' ";
-    $query .= "WHERE username = '{$username}' ";
+    $query .= "user_image  = ?,  ";
+    $query .= "user_email  = ?  ";
+    $query .= "WHERE username = ? ";
 
-    $update_user_query = mysqli_query($connection, $query);
-    comfirm($update_user_query);
+    $update_user_query = $connection->prepare( $query);
+    confirm($update_user_query->execute([$the_username, $the_user_password, $the_user_firstname, $the_user_lastname, $the_user_image,$the_user_email,$username] ));
+
     header("Location: profile.php");
 }
 

@@ -11,8 +11,7 @@ if(isset($_POST['submit'])){
     $email =$_POST['email'];
     $body =$_POST['body'];
 
-    $username = mysqli_real_escape_string($connection, $username);
-    $email = mysqli_real_escape_string($connection, $email);
+
 
     echo " <div class='alert alert-success' role='alert'>Successful Registration</div>";
 }

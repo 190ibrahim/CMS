@@ -20,8 +20,10 @@ include "includes\header.php";
                 <?php
 
                 $query = "SELECT * FROM posts";
-                $select_all_posts_query = mysqli_query($connection, $query);
-                while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+                $select_all_posts_query = $connection->prepare($query);
+                confirm($select_all_posts_query->execute());
+                $post=  $select_all_posts_query->fetchAll();
+                foreach($post as $row){
                     $post_title = $row['post_title'];
                     $post_author = $row['post_author'];
                     $post_date = $row['post_date'];

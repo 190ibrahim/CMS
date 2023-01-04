@@ -18,10 +18,10 @@ include "includes\header.php";
             <!-- Blog Entries Column -->
             <div class="col-md-8">
                 <?php
-
-                $query = "SELECT * FROM posts WHERE post_status = 'published'";
-                $select_all_posts_query = mysqli_query($connection, $query);
-                while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+                $query = $connection->prepare("SELECT * FROM posts WHERE post_status = 'published'");
+                confirm($query->execute());
+                $post = $query->fetchAll();
+                foreach ($post as $row) {
                     $post_id = $row['post_id'];
                     $post_title = $row['post_title'];
                     $post_author = $row['post_author'];
@@ -29,7 +29,6 @@ include "includes\header.php";
                     $post_image = $row['post_image'];
                     $post_content = substr($row['post_content'], 0, 100);
                     $post_status = $row['post_status'];
-
 
                     if ($post_status == 'published') {
                         ?>

@@ -16,12 +16,12 @@ if (isset($_POST['add_user'])) {
 
     $query = "INSERT INTO users(username, user_password, user_firstname, ";
     $query .= "user_lastname, user_email, user_image, user_role) ";
-    $query .= "VALUES('{$username}','{$user_password}','{$user_firstname}', ";
-    $query .= " '{$user_lastname}','{$user_email}','{$user_image}', '{$user_role}')";
-    $add_user_query = mysqli_query($connection, $query);
+    $query .= "VALUES(? , ? , ? , ? , ? , ? , ? )";
+    $add_user_query = $connection->prepare( $query);
+    confirm($add_user_query->execute([$username, $user_password, $user_firstname, $user_lastname, $user_email, $user_image, $user_role ]));
     // header("Location: posts.php");
     // exit;
-    comfirm($add_user_query);
+
     echo " <div class='alert alert-success' role='alert'>User Created: 
     <a href='users.php'>View User</a> </div>";
 }

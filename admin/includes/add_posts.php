@@ -19,15 +19,17 @@ if (isset($_POST['create_post'])) {
 
     $query = "INSERT INTO posts(post_category_id, post_title, post_author, ";
     $query .= "post_date, post_image, post_content, post_tags, post_status) ";
-    $query .= "VALUES({$post_category_id},'{$post_title}','{$post_author}',now(), ";
-    $query .= " '{$post_image}','{$post_content}','{$post_tags}', '{$post_status}')";
-    $create_post_query = mysqli_query($connection, $query);
+    $query .= "VALUES(?,?,?,now(),?,?,?,?) ";
+   
+
+    $create_post_query = $connection->prepare( $query);
+    confirm($create_post_query->execute([$post_category_id, $post_title,$post_author,$post_image, $post_content,$post_tags,$post_status ]));
     // header("Location: posts.php");
     // exit;
-    comfirm($create_post_query);
+
 
     //pull out the last created Id in the table
-    $the_post_id =mysqli_insert_id($connection);
+    $the_post_id = $connection->lastInsertId();
 echo " <div class='alert alert-success' role='alert'>Post Created: 
     <a href='../post.php?p_id={$the_post_id}'>View Post</a>
 Or <a href='posts.php'>Edit Other Posts</a></div>";
@@ -45,12 +47,12 @@ Or <a href='posts.php'>Edit Other Posts</a></div>";
         <label for="post_category">Choose a category:</label>
         <select class="form-select" name="post_category" id="">
             <?php
-            $query = "SELECT * FROM categories";
-            $select_categories = mysqli_query($connection, $query);
-            comfirm($select_categories);
-            while ($row = mysqli_fetch_assoc($select_categories)) {
-                $cat_id = $row['cat_id'];
+            $query = $connection->prepare("SELECT * FROM categories");
+            confirm($query->execute());
+            $category = $query->fetchAll();
+            foreach ($category as $row) {
                 $cat_title = $row['cat_title'];
+                $cat_id = $row['cat_id'];
                 echo "<option value='$cat_id'> $cat_title</option>";
             }
             ?>

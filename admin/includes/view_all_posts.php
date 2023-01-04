@@ -19,8 +19,11 @@
         <?php
 
         $query = "SELECT * FROM posts";
-        $select_posts = mysqli_query($connection, $query);
-        while ($row = mysqli_fetch_assoc($select_posts)) {
+        $select_posts = $connection->prepare( $query);
+        confirm($select_posts->execute());
+        $posts = $select_posts-> fetchAll();
+
+        foreach($posts as $row){
             $post_id = $row['post_id'];
             $post_author = $row['post_author'];
             $post_title = $row['post_title'];
@@ -33,8 +36,11 @@
             $post_date = $row['post_date'];
 
             $query1 = "SELECT * FROM categories WHERE cat_id= $post_category_id";
-            $select_category = mysqli_query($connection, $query1);
-            while ($row = mysqli_fetch_assoc($select_category)) {
+
+            $select_category = $connection->prepare( $query1);
+            confirm($select_category->execute());
+            $category = $select_category->fetchAll();
+            foreach ($category as $row) {
                 $cat_title = $row['cat_title'];
             }
 
@@ -64,10 +70,13 @@
 if (isset($_GET['delete'])) {
 
     $the_post_id = $_GET['delete'];
-    $query = "DELETE FROM posts WHERE post_id = {$the_post_id} ";
-    $delete_query = mysqli_query($connection, $query);
+    $delete_query = "DELETE FROM posts WHERE post_id =?";
+    $delete_query = $connection->prepare( $delete_query);
+    confirm($delete_query->execute([$the_post_id]));
+
     header("Location: posts.php");
 }
+
 
 
 //UPDATE A POST

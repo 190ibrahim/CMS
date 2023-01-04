@@ -16,12 +16,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-
-                    $query = "SELECT * FROM categories  LIMIT 3";
-                    $select_all_categories_query = mysqli_query($connection, $query);
-                    while ($row = mysqli_fetch_assoc($select_all_categories_query)) {
+                    $query = $connection->prepare("SELECT * FROM categories LIMIT 3");
+                    confirm($query->execute());
+                    $category = $query->fetchAll();
+                    foreach ($category as $row) {
                         $cat_title = $row['cat_title'];
-                        echo "<li><a href='#'>{$cat_title}</a> </li>";
+                        $cat_id = $row['cat_id'];
+                        echo "<li><a href='category.php?category=$cat_id''>{$cat_title}</a> </li>";
                     }
 
 
@@ -39,14 +40,16 @@
                             <a href='registration.php'>Register</a>
                             </li> ";
                     }
-                    ?>
+                ?>
 
 
 
                     <li>
                         <a href='contact.php'>Contact us</a>
                     </li>
-
+                    <!-- <li>
+                        <a href='registration.php'>Register</a>
+                    </li> -->
 
 
                 </ul>

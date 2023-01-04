@@ -1,15 +1,32 @@
 <?php
 
-$db['db_host'] = 'localhost';
-$db['db_user'] = 'root';
-$db['db_pass'] = '';
-$db['db_name'] = 'cms';
+$dbconn = [
+    'host' => 'localhost',
+    'db' => 'cms',
+    'port' => '3306',
+    'username' => 'root',
+    'password' => ''
+];
 
-foreach ($db as $key => $value) {
-    define(strtoupper($key), $value);
-}
+$error = new stdClass();
+$error->type = 'none';
 
-$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-if (!$connection) {
-    echo "The database is not connected";
+try {
+    // Create the DSN string
+    $dsn = 'mysql:host=' . $dbconn['host'] . ';dbname=' . $dbconn['db'] . ';port='.
+        $dbconn['port'] . ';charset=utf8mb4';
+
+    // Create the PDO object
+    $connection = new PDO($dsn, $dbconn['username'], $dbconn['password'], [
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+
+    if (!$connection) {
+        echo "The database is not connected";
+    }
+
+} catch (PDOException $pex) {
+    $error->type = 'db';
+} catch (Throwable $exc) {
+    $error->type = 'server';
 }
