@@ -28,4 +28,4 @@ PHP MySQLi Prepared Statement for the database queries
 
 
 
-Regenerate response
+
