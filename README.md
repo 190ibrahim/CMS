@@ -25,7 +25,7 @@ The backend consists of a dashboard and various pages for managing the content o
 
 The posts page allows the user to view, add, edit, and delete posts. The categories page allows the user to view, add, and delete categories. The users page allows the user to view, add, edit, and delete users. The comments page allows the user to view, approve, unapprove, and delete comments.
 
-The project uses a MySQL database to store all the data. The database consists of tables for posts, categories, users, and comments. The posts table stores information about each post such as its title, content, author, and date. The categories table stores information about each category such as its name and description. The users table stores information about each user such as their username, password, first name, last name, email, and image. The comments table stores information about each comment such as its content, author, email, status, and date.
+The project uses a MySQL database to store all the data. The database consists of tables for posts, categories, users, and comments. The posts table stores information about each post such as its title, content, author, and date. The categories table stores information about each category such as its name . The users table stores information about each user such as their username, password, first name, last name, email, and image. The comments table stores information about each comment such as its content, author, email, status, and date.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
