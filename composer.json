@@ -1,5 +1,9 @@
 {
     "name": "190ibrahimahmed/cms",
+    "require": {
+        "php": "7.4.*"
+    },
+
     "authors": [
         {
             "name": "Ibrahim Ibrahim",
