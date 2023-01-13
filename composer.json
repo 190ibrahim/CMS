@@ -1,5 +1,5 @@
 {
-    "name": "edwin/cms",
+    "name": "190ibrahimahmed/cms",
     "require": {
         "phpmailer/phpmailer": "^5.2",
         "pusher/pusher-php-server": "^3.0",
@@ -20,8 +20,8 @@
 
     "authors": [
         {
-            "name": "Edwin Diaz",
-            "email": "edwin@codingfaculty.com"
+            "name": "Ibrahim Ibrahim",
+            "email": "190ibrahimahmed@gmail.com"
         }
     ]
 }
