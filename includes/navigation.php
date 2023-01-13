@@ -16,7 +16,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-                    $query = $connection->prepare("SELECT * FROM categories");
+                    $query = $connection->prepare("SELECT * FROM categories LIMIT 3");
                     $query->execute();
                     $category = $query->fetchAll();
                     foreach ($category as $row) {
