@@ -1,11 +1,11 @@
 <?php
 
 $dbconn = [
-    'host' => 'localhost',
-    'db' => 'cms',
+    'host' => 'eu-cdbr-west-03.cleardb.net',
+    'db' => 'heroku_446a1eee8463ee6',
     'port' => '3306',
-    'username' => 'root',
-    'password' => ''
+    'username' => 'b97ff3798df03f',
+    'password' => '06a88943'
 ];
 
 $error = new stdClass();
