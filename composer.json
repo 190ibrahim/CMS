@@ -1,14 +1,5 @@
 {
     "name": "190ibrahimahmed/cms",
-    "require": {
-        "pusher/pusher-php-server": "^3.0",
-        "vlucas/phpdotenv": "^2.4"
-    },
-
-    
-
-
-
     "authors": [
         {
             "name": "Ibrahim Ibrahim",
