@@ -4,7 +4,7 @@ $error->type = 'none';
 
 try {
     // Retrieve the environment variables
-    $url = getenv("DATABASE_URL");
+    $url = getenv("CLEARDB_DATABASE_URL");
     $dbparts = parse_url($url);
 
     $hostname = $dbparts['host'];
