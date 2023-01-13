@@ -1,23 +1,22 @@
 <?php
-
-$dbconn = [
-    'host' => 'eu-cdbr-west-03.cleardb.net',
-    'db' => 'heroku_446a1eee8463ee6',
-    'port' => '3306',
-    'username' => 'b97ff3798df03f',
-    'password' => '06a88943'
-];
-
 $error = new stdClass();
 $error->type = 'none';
 
 try {
+    // Retrieve the environment variables
+    $url = getenv("DATABASE_URL");
+    $dbparts = parse_url($url);
+
+    $hostname = $dbparts['host'];
+    $username = $dbparts['user'];
+    $password = $dbparts['pass'];
+    $database = ltrim($dbparts['path'],'/');
+
     // Create the DSN string
-    $dsn = 'mysql:host=' . $dbconn['host'] . ';dbname=' . $dbconn['db'] . ';port='.
-        $dbconn['port'] . ';charset=utf8mb4';
+    $dsn = "mysql:host=$hostname;dbname=$database;charset=utf8mb4";
 
     // Create the PDO object
-    $connection = new PDO($dsn, $dbconn['username'], $dbconn['password'], [
+    $connection = new PDO($dsn, $username, $password, [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
 
@@ -30,3 +29,4 @@ try {
 } catch (Throwable $exc) {
     $error->type = 'server';
 }
+
